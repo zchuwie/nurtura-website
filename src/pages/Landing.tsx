@@ -203,7 +203,35 @@ export default function Landing() {
           <ScrollReveal direction="right" delay={0.15}>
             <div className="text-center md:text-left">
               <h2
-                className="text-[1.9rem] sm:text-5xl lg:text-6xl font-black"
+                className="md:hidden text-[2.45rem] font-black leading-[0.98]"
+                style={{ color: COLOR_TEXT_DARK }}
+              >
+                <span className="block">Grow</span>
+                <span
+                  className={`inline-block mt-2 px-5 py-2 rounded-2xl border border-[#6e7d48]/20 shadow-[0_10px_28px_rgba(134,151,90,0.24)] transition-all duration-300 ${
+                    animating
+                      ? "opacity-0 -translate-y-2 scale-95"
+                      : "opacity-100 translate-y-0 scale-100"
+                  }`}
+                  style={{
+                    background: COLOR_BG_CARD,
+                    color: COLOR_PRIMARY_DARK,
+                  }}
+                >
+                  {CYCLING_WORDS[wordIndex]}
+                </span>
+                <span className="mt-2.5 block text-[2.55rem]">in Smaller</span>
+                <span className="relative mt-1.5 block text-[2.75rem]">
+                  Spaces.
+                  <span
+                    className="absolute left-1/2 top-[74%] h-2.5 w-[88%] -translate-x-1/2 rounded-full"
+                    style={{ background: "rgba(134,151,90,0.25)" }}
+                  />
+                </span>
+              </h2>
+
+              <h2
+                className="hidden md:block text-[1.9rem] sm:text-5xl lg:text-6xl font-black"
                 style={{ color: COLOR_TEXT_DARK, lineHeight: 1.1 }}
               >
                 Grow{" "}
