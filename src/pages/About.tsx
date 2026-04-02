@@ -7,7 +7,7 @@ import sabalboroImg from "../assets/Sabalboro.jpg";
 import espinosaImg from "../assets/Espinosa.jpg";
 import navarraImg from "../assets/Navarra.png";
 import jabolImg from "../assets/Jabol.jpg";
-import floresImg from "../assets/Flores.jpg";
+import floresImg from "../assets/Flores.png";
 import nimoImg from "../assets/Nimo.jpeg";
 // Colors: primary #86975A | bg #F9FAFB | black #282828 | gray #919191 | secondary #E5EDCF
 
