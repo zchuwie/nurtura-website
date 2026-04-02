@@ -221,12 +221,8 @@ export default function Landing() {
                   {CYCLING_WORDS[wordIndex]}
                 </span>
                 <span className="mt-2.5 block text-[2.55rem]">in Smaller</span>
-                <span className="relative mt-1.5 block text-[2.75rem]">
-                  Spaces.
-                  <span
-                    className="absolute left-1/2 top-[74%] h-2.5 w-[88%] -translate-x-1/2 rounded-full"
-                    style={{ background: "rgba(134,151,90,0.25)" }}
-                  />
+                <span className="relative isolate mt-1.5 block text-[2.75rem]">
+                  <span className="relative z-10">Spaces.</span>
                 </span>
               </h2>
 
