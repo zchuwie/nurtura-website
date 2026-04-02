@@ -93,7 +93,7 @@ export default function Landing() {
     description:
       "Nurtura is a smart IoT-based indoor farming system for urban environments. Grow smarter, fresher, and more efficiently.",
     url: "https://nurturaloam.tech/",
-    image: "https://nurturaloam.tech/og-image.jpg",
+    image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
   });
   // Add potentialAction manually since it's not generic
@@ -124,10 +124,7 @@ export default function Landing() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nurturaloam.tech/" />
-        <meta
-          property="og:image"
-          content="https://nurturaloam.tech/og-image.jpg"
-        />
+        <meta property="og:image" content="https://nurturaloam.tech/Logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -139,7 +136,7 @@ export default function Landing() {
         />
         <meta
           name="twitter:image"
-          content="https://nurturaloam.tech/og-image.jpg"
+          content="https://nurturaloam.tech/Logo.png"
         />
         <link rel="canonical" href="https://nurturaloam.tech/" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>

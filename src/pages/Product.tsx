@@ -78,7 +78,7 @@ export default function Product() {
     description:
       "Nurtura is an IoT-powered indoor farming system designed for urban environments.",
     url: "https://nurturaloam.tech/product",
-    image: "https://nurturaloam.tech/og-image.jpg",
+    image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
   });
   // Add brand manually since it's not generic
@@ -105,10 +105,7 @@ export default function Product() {
         />
         <meta property="og:type" content="product" />
         <meta property="og:url" content="https://nurturaloam.tech/product" />
-        <meta
-          property="og:image"
-          content="https://nurturaloam.tech/og-image.jpg"
-        />
+        <meta property="og:image" content="https://nurturaloam.tech/Logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -120,7 +117,7 @@ export default function Product() {
         />
         <meta
           name="twitter:image"
-          content="https://nurturaloam.tech/og-image.jpg"
+          content="https://nurturaloam.tech/Logo.png"
         />
         <link rel="canonical" href="https://nurturaloam.tech/product" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>

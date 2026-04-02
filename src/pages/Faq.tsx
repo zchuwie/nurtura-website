@@ -105,7 +105,7 @@ export default function Faq() {
     description:
       "Answers to common questions about Nurtura setup, automation, app access, and support.",
     url: "https://nurturaloam.tech/faq",
-    image: "https://nurturaloam.tech/og-image.jpg",
+    image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
   });
 
@@ -128,10 +128,7 @@ export default function Faq() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nurturaloam.tech/faq" />
-        <meta
-          property="og:image"
-          content="https://nurturaloam.tech/og-image.jpg"
-        />
+        <meta property="og:image" content="https://nurturaloam.tech/Logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Nurtura FAQ | Common Questions" />
         <meta
@@ -140,7 +137,7 @@ export default function Faq() {
         />
         <meta
           name="twitter:image"
-          content="https://nurturaloam.tech/og-image.jpg"
+          content="https://nurturaloam.tech/Logo.png"
         />
         <link rel="canonical" href="https://nurturaloam.tech/faq" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
@@ -156,8 +153,8 @@ export default function Faq() {
               User Manual and Common Questions
             </h1>
             <p className="text-sm sm:text-base text-[#919191] max-w-2xl mx-auto leading-relaxed">
-              Quick answers for setup, usage, automation, and support. Expand any
-              item below to view details.
+              Quick answers for setup, usage, automation, and support. Expand
+              any item below to view details.
             </p>
           </ScrollReveal>
 
@@ -184,7 +181,9 @@ export default function Faq() {
                             aria-expanded={isOpen}
                             className="w-full px-4 sm:px-5 py-4 text-left flex items-center justify-between gap-4"
                             onClick={() =>
-                              setOpenItem((prev) => (prev === itemId ? "" : itemId))
+                              setOpenItem((prev) =>
+                                prev === itemId ? "" : itemId,
+                              )
                             }
                           >
                             <span className="text-sm sm:text-base font-semibold text-[#282828]">

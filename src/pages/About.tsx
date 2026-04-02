@@ -92,7 +92,7 @@ export default function About() {
     description:
       "Meet the Nurtura team and learn about our mission, values, and story.",
     url: "https://nurturaloam.tech/about",
-    image: "https://nurturaloam.tech/og-image.jpg",
+    image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
   });
   return (
@@ -114,10 +114,7 @@ export default function About() {
         />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content="https://nurturaloam.tech/about" />
-        <meta
-          property="og:image"
-          content="https://nurturaloam.tech/og-image.jpg"
-        />
+        <meta property="og:image" content="https://nurturaloam.tech/Logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Nurtura | Meet the Team" />
         <meta
@@ -126,7 +123,7 @@ export default function About() {
         />
         <meta
           name="twitter:image"
-          content="https://nurturaloam.tech/og-image.jpg"
+          content="https://nurturaloam.tech/Logo.png"
         />
         <link rel="canonical" href="https://nurturaloam.tech/about" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
