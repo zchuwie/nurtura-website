@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nurturaloam.tech/sitemap.xml
