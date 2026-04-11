@@ -76,6 +76,10 @@ export default function Landing() {
   const [wordIndex, setWordIndex] = useState<number>(0);
   const [animating, setAnimating] = useState<boolean>(false);
 
+  const handleDownloadClick = () => {
+    window.dispatchEvent(new Event("open-download-modal"));
+  };
+
   useEffect(() => {
     const id = setInterval(() => {
       setAnimating(true);
@@ -414,13 +418,15 @@ export default function Landing() {
           </ScrollReveal>
           <ScrollReveal direction="up" delay={0.25}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="#download"
+              <button
+                type="button"
+                onClick={handleDownloadClick}
                 className="w-full max-w-52 sm:w-auto px-7 py-3 text-white text-sm font-bold rounded-full transition-all min-h-11"
                 style={{ background: COLOR_TEXT_DARK }}
+                aria-label="Nurtura app coming soon"
               >
-                Download Here
-              </a>
+                Download App (Coming Soon)
+              </button>
             </div>
           </ScrollReveal>
         </ScrollReveal>

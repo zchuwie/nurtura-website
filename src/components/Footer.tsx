@@ -1,7 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import footerLogo from "../assets/greennobgCompanyLogo.png";
 
 export default function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleToSurface = () => {
+    const smoothScroll = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Wait for route render before scrolling.
+      setTimeout(smoothScroll, 0);
+      return;
+    }
+
+    smoothScroll();
+  };
+
   return (
     <footer className="bg-[#E5EDCF] border-t border-[#86975A]/20">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10">
@@ -22,6 +40,12 @@ export default function Footer() {
               className="hover:text-[#86975A] transition-colors"
             >
               Product
+            </Link>
+            <Link
+              to="/pricing"
+              className="hover:text-[#86975A] transition-colors"
+            >
+              Pricing
             </Link>
             <Link
               to="/about"
@@ -58,7 +82,7 @@ export default function Footer() {
         <div className="mt-8 pt-6 border-t border-[#86975A]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#919191]">
           <p>© 2026 LoamTech Solutions. All Rights Reserved.</p>
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={handleToSurface}
             className="flex items-center gap-1 hover:text-[#86975A] transition-colors font-medium uppercase tracking-widest"
           >
             To The Surface

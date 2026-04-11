@@ -1,14 +1,18 @@
 import { Helmet } from "react-helmet-async";
+import { useState } from "react";
 import { getJsonLd } from "../helper/jsonLd";
 // ...existing code...
 import ScrollReveal from "../helper/scroll";
-import balmondImg from "../assets/balmond.png";
 import sabalboroImg from "../assets/Sabalboro.jpg";
 import espinosaImg from "../assets/Espinosa.jpg";
 import navarraImg from "../assets/Navarra.png";
 import jabolImg from "../assets/Jabol.jpg";
 import floresImg from "../assets/Flores.png";
 import nimoImg from "../assets/Nimo.jpeg";
+import valdezImg from "../assets/Valdez.png";
+import deJesusImg from "../assets/De Jesus.jpg";
+import groupImg from "../assets/GroupPhoto.jpeg";
+import mingImg from "../assets/Ming.png";
 // Colors: primary #86975A | bg #F9FAFB | black #282828 | gray #919191 | secondary #E5EDCF
 
 interface TeamMember {
@@ -22,47 +26,92 @@ interface Value {
   emoji: string;
 }
 
+interface ImageWithFallbackProps {
+  src?: string;
+  alt: string;
+  className: string;
+  fallbackClassName: string;
+}
+
+function getInitials(text: string): string {
+  const initials = text
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
+
+  return initials || "NA";
+}
+
+function ImageWithFallback({
+  src,
+  alt,
+  className,
+  fallbackClassName,
+}: ImageWithFallbackProps) {
+  const [failed, setFailed] = useState<boolean>(false);
+
+  if (!src || failed) {
+    return (
+      <div aria-label={alt} role="img" className={fallbackClassName}>
+        {getInitials(alt)}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 const teamMembers: TeamMember[] = [
   {
-    name: "David Jim De Jesus",
+    name: "David Jim M. De Jesus",
     role: "Project Manager",
-    image: balmondImg,
+    image: deJesusImg,
     bio: "Leads project coordination, sprint planning, risk management, and documentation alignment.",
   },
   {
-    name: "Neo Nimo Isaiah",
+    name: "Neo Nimo D. Isaiah",
     role: "Lead Frontend Developer",
     image: nimoImg,
     bio: "Designs frontend architecture and drives responsive, accessible user experiences.",
   },
   {
-    name: "Angelo Mark Flores Jr.",
+    name: "Angelo Mark S. Flores Jr.",
     role: "Lead Backend Developer",
     image: floresImg,
     bio: "Builds core backend modules and enforces code quality across server-side services.",
   },
   {
-    name: "John Yohan Navarra",
+    name: "John Yohan J. Navarra",
     role: "Lead IoT Engineer",
     image: navarraImg,
     bio: "Architects IoT hardware integration, firmware behavior, and sensor communication workflows.",
   },
   {
-    name: "Rex Gabrielle Guim Espinosa",
+    name: "Gabrielle Romeo Rex G. Espinosa",
     role: "IoT Specialist",
     image: espinosaImg,
     bio: "Handles sensor calibration, hardware assembly, and troubleshooting for deployment readiness.",
   },
   {
-    name: "Allan Jabol Jr.",
+    name: "Allan V. Jabol Jr.",
     role: "IoT Engineer",
     image: jabolImg,
     bio: "Supports hardware installation, sensor testing, and power management documentation.",
   },
   {
-    name: "Maxine Joy Valdez",
+    name: "Maxine Joy B. Valdez",
     role: "UI/UX Designer/Research Specialist",
-    image: balmondImg,
+    image: valdezImg,
     bio: "Implements interface components and refines product usability through research-led decisions.",
   },
   {
@@ -72,9 +121,9 @@ const teamMembers: TeamMember[] = [
     bio: "Integrates backend APIs and leads quality assurance with focused frontend and backend tests.",
   },
   {
-    name: "Pusa sa Kanto",
-    role: "Pusa sa Kanto",
-    image: balmondImg,
+    name: "Ming T. Ura",
+    role: "Moral Support Specialist",
+    image: mingImg,
     bio: "Morale and vibe specialist who keeps the team calm during late-night sprint sessions.",
   },
 ];
@@ -165,14 +214,13 @@ export default function About() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="left" delay={0.4}>
-              <div className="bg-[#E5EDCF] rounded-3xl aspect-video flex flex-col items-center justify-center border-2 border-dashed border-[#86975A]/30 p-8 text-center">
-                <div className="text-5xl mb-4">📸</div>
-                <p className="text-sm font-semibold text-[#282828]">
-                  Nurtura Team
-                </p>
-                <p className="text-xs text-[#919191] mt-1">
-                  Project members across software, QA, and IoT hardware
-                </p>
+              <div className="bg-[#E5EDCF] rounded-3xl aspect-video overflow-hidden">
+                <ImageWithFallback
+                  src={groupImg}
+                  alt="Nurtura team group photo"
+                  className="w-full h-full object-cover"
+                  fallbackClassName="w-full h-full flex items-center justify-center bg-[#E5EDCF] text-[#86975A] text-5xl font-black"
+                />
               </div>
             </ScrollReveal>
           </ScrollReveal>
@@ -201,18 +249,12 @@ export default function About() {
                   id={`member-${i}`}
                   className="bg-[#F9FAFB] rounded-2xl p-6 flex flex-col items-center text-center gap-3"
                 >
-                  {/* Avatar: show image if present, fallback to initial */}
-                  {member.image ? (
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-[#86975A]/20 bg-[#E5EDCF]"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 bg-[#E5EDCF] rounded-full flex items-center justify-center text-2xl text-[#86975A] font-black border-2 border-[#86975A]/20">
-                      {member.name.charAt(0)}
-                    </div>
-                  )}
+                  <ImageWithFallback
+                    src={member.image}
+                    alt={member.name}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-[#86975A]/20 bg-[#E5EDCF]"
+                    fallbackClassName="w-16 h-16 bg-[#E5EDCF] rounded-full flex items-center justify-center text-xl text-[#86975A] font-black border-2 border-[#86975A]/20"
+                  />
                   <h3 className="font-bold text-[#282828] text-sm">
                     {member.name}
                   </h3>

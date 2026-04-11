@@ -6,7 +6,7 @@ import { getJsonLd } from "../helper/jsonLd";
 
 const CONTACT_EMAIL = "lots.loamtechsolutions@gmail.com";
 const CONTACT_SUBJECT = "Nurtura Inquiry";
-const CONTACT_BODY = `Hello Nurtura Team,
+const CONTACT_BODY = `Hello LoamTech Solutions Team,
 
 I would like to ask about:
 - Topic:
@@ -30,6 +30,19 @@ interface FaqGroup {
   items: FaqItem[];
 }
 
+interface ErrorMeaning {
+  code: string;
+  meaning: string;
+  behavior: string;
+  troubleshooting: string;
+}
+
+const ERROR_CODE_TABLE_QUESTION = "What do the device error codes mean?";
+
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 const faqGroups: FaqGroup[] = [
   {
     title: "Getting Started",
@@ -48,6 +61,16 @@ const faqGroups: FaqGroup[] = [
         question: "How do I start using the system?",
         answer:
           "Set up the hardware rack, connect the IoT module to your network, then pair it with the mobile app to begin monitoring and control.",
+      },
+      {
+        question: "Can I install or service the hub sensors by myself?",
+        answer:
+          "At the moment, no. The hub sensor setup is advanced and is currently installed, calibrated, and serviced only by LoamTech Solutions to ensure safety and reliability.",
+      },
+      {
+        question: "Can I troubleshoot hardware issues by myself?",
+        answer:
+          "For now, troubleshooting of hub sensors and hardware-related issues is handled only by LoamTech Solutions to avoid misconfiguration and equipment damage.",
       },
     ],
   },
@@ -72,6 +95,61 @@ const faqGroups: FaqGroup[] = [
     ],
   },
   {
+    title: "Connectivity and Data",
+    items: [
+      {
+        question: "How does Nurtura communicate with my device?",
+        answer:
+          "Nurtura sends updates between your rack and app in real time, so readings and actions stay in sync.",
+      },
+      {
+        question: "Is the connection secure?",
+        answer:
+          "Yes. Your device connection is protected and requires account credentials.",
+      },
+      {
+        question: "What sensor data is sent to the app?",
+        answer:
+          "The system sends temperature, humidity, soil moisture, and light readings. Water usage may also be included when watering events occur.",
+      },
+      {
+        question: "How reliable are command and sensor messages?",
+        answer:
+          "Nurtura is designed so updates and controls are delivered reliably, even if the network is unstable for a short time.",
+      },
+      {
+        question: "What happens if the backend goes offline?",
+        answer:
+          "If the service is temporarily unavailable, the app and device detect it and reconnect when service returns.",
+      },
+      {
+        question: "Can sensor streaming be turned on or off?",
+        answer:
+          "Yes. Sensor updates can be turned on or off depending on your rack status and setup.",
+      },
+      {
+        question: "Where can I check the meaning of device error codes?",
+        answer:
+          "Open the device error code question below to view the full error meaning table and what each code usually does.",
+      },
+      {
+        question: "What do CRITICAL, HIGH, MEDIUM, and LOW severities mean?",
+        answer:
+          "CRITICAL means immediate action is required and related automation may pause. HIGH means functionality is impaired and should be checked soon. MEDIUM means performance is degraded and should be monitored. LOW is informational or recovery state with no immediate action needed.",
+      },
+      {
+        question: "What information is included in an error report?",
+        answer:
+          "An error report can include an error code, plain-language message, severity level, time of issue, affected part, and extra details for troubleshooting.",
+      },
+      {
+        question: ERROR_CODE_TABLE_QUESTION,
+        answer:
+          "Here is the complete error and recovery code reference used by Nurtura, including quick troubleshooting methods. For safety and reliability, actual hardware troubleshooting is managed only by LoamTech Solutions.",
+      },
+    ],
+  },
+  {
     title: "App and Support",
     items: [
       {
@@ -82,7 +160,7 @@ const faqGroups: FaqGroup[] = [
       {
         question: "Where can I report issues or ask for help?",
         answer:
-          "Use the Contact the Team button below to open a pre-filled Gmail draft directly to the Nurtura team.",
+          "Use the Contact the Team button below to open a pre-filled Gmail draft directly to LoamTech Solutions.",
       },
       {
         question: "Will there be a full user manual?",
@@ -93,11 +171,173 @@ const faqGroups: FaqGroup[] = [
   },
 ];
 
+const errorMeanings: ErrorMeaning[] = [
+  {
+    code: "SENSOR_FAILURE",
+    meaning: "A sensor is not responding correctly.",
+    behavior:
+      "Usually HIGH/CRITICAL. Related automatic actions may pause and you may receive an alert.",
+    troubleshooting:
+      "Check sensor wiring, restart the rack, and make sure the sensor is firmly connected.",
+  },
+  {
+    code: "SENSOR_TIMEOUT",
+    meaning: "Sensor did not respond in time.",
+    behavior:
+      "Usually MEDIUM/HIGH. The current reading may be skipped and retried automatically.",
+    troubleshooting:
+      "Wait for the next retry cycle, then restart the rack if the issue repeats.",
+  },
+  {
+    code: "SENSOR_NOT_FOUND",
+    meaning: "Expected sensor hardware was not detected.",
+    behavior:
+      "Usually HIGH/CRITICAL. Related measurements remain unavailable until fixed.",
+    troubleshooting:
+      "Reconnect the sensor module and verify the correct sensor is installed.",
+  },
+  {
+    code: "SENSOR_OUT_OF_RANGE",
+    meaning: "Sensor reported a value outside normal limits.",
+    behavior:
+      "Usually MEDIUM. Reading may be flagged to avoid unsafe automation decisions.",
+    troubleshooting:
+      "Check environmental conditions and sensor placement, then calibrate if needed.",
+  },
+  {
+    code: "PUMP_FAILURE",
+    meaning: "Pump did not operate as expected.",
+    behavior:
+      "Usually HIGH/CRITICAL. Watering may fail and related automatic actions may pause.",
+    troubleshooting:
+      "Check pump power, tubing, and blockages; ensure the pump motor can spin freely.",
+  },
+  {
+    code: "PUMP_TIMEOUT",
+    meaning: "Pump action took too long.",
+    behavior:
+      "Usually MEDIUM/HIGH. Process may be stopped to prevent hardware damage.",
+    troubleshooting:
+      "Inspect water flow and pressure, then restart watering after fixing restrictions.",
+  },
+  {
+    code: "PUMP_NO_WATER",
+    meaning: "Pump cannot draw water from source.",
+    behavior:
+      "Usually HIGH. Watering stops and refill or plumbing checks are needed.",
+    troubleshooting:
+      "Refill water source and make sure intake hose is submerged and not blocked.",
+  },
+  {
+    code: "PUMP_FALSE_START",
+    meaning: "Pump was commanded to start but no valid activity was detected.",
+    behavior:
+      "Usually MEDIUM/HIGH. Action may be cancelled and diagnostics logged.",
+    troubleshooting:
+      "Check electrical connection and retry once; if repeated, inspect pump hardware.",
+  },
+  {
+    code: "LIGHT_FAILURE",
+    meaning: "Grow light did not respond as expected.",
+    behavior:
+      "Usually HIGH. Lighting control can fail and warning notifications can be sent.",
+    troubleshooting:
+      "Check power supply and light wiring, then test light manually from app controls.",
+  },
+  {
+    code: "UNKNOWN_ERROR",
+    meaning: "Unexpected device-side issue.",
+    behavior:
+      "Severity varies. The system records details and may trigger alerts based on impact.",
+    troubleshooting:
+      "Restart the rack first; if the issue persists, contact support with the error time.",
+  },
+  {
+    code: "SENSOR_RECOVERED",
+    meaning: "A previous sensor issue has been resolved.",
+    behavior:
+      "Usually LOW. Related automations can be resumed after confirmation.",
+    troubleshooting:
+      "No action needed. Continue monitoring to confirm values remain stable.",
+  },
+  {
+    code: "PUMP_RECOVERED",
+    meaning: "A previous pump issue has been resolved.",
+    behavior: "Usually LOW. Pump-related automations can safely resume.",
+    troubleshooting:
+      "No action needed. Run a short watering test if you want to verify recovery.",
+  },
+  {
+    code: "LIGHT_RECOVERED",
+    meaning: "A previous lighting issue has been resolved.",
+    behavior: "Usually LOW. Lighting controls can return to normal operation.",
+    troubleshooting:
+      "No action needed. Confirm scheduled lighting resumes as expected.",
+  },
+  {
+    code: "UNKNOWN_RECOVERY",
+    meaning: "A previously unknown issue was reported as recovered.",
+    behavior:
+      "Usually LOW. The issue is marked resolved and normal monitoring continues.",
+    troubleshooting:
+      "No action needed. If the same issue returns, report it with screenshots/log time.",
+  },
+];
+
 export default function Faq() {
   const [openItem, setOpenItem] = useState<string>("0-0");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
     CONTACT_EMAIL,
   )}&su=${encodeURIComponent(CONTACT_SUBJECT)}&body=${encodeURIComponent(CONTACT_BODY)}`;
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const highlightMatch = (text: string) => {
+    const query = searchQuery.trim();
+    if (!query) return text;
+
+    const pattern = new RegExp(`(${escapeRegex(query)})`, "ig");
+    const parts = text.split(pattern);
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <mark
+          key={`${part}-${index}`}
+          className="bg-[#86975A]/30 text-[#1f2a12] font-semibold rounded px-0.5"
+        >
+          {part}
+        </mark>
+      ) : (
+        part
+      ),
+    );
+  };
+
+  const filteredFaqGroups = faqGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => {
+        if (!normalizedQuery) return true;
+        const isErrorTableItem = item.question === ERROR_CODE_TABLE_QUESTION;
+        const errorTableText = isErrorTableItem
+          ? errorMeanings
+              .map(
+                (entry) =>
+                  `${entry.code} ${entry.meaning} ${entry.behavior} ${entry.troubleshooting}`,
+              )
+              .join(" ")
+              .toLowerCase()
+          : "";
+
+        return (
+          item.question.toLowerCase().includes(normalizedQuery) ||
+          item.answer.toLowerCase().includes(normalizedQuery) ||
+          errorTableText.includes(normalizedQuery)
+        );
+      }),
+    }))
+    .filter((group) => group.items.length > 0);
 
   const jsonLd = getJsonLd({
     type: "FAQPage",
@@ -108,6 +348,20 @@ export default function Faq() {
     image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
   });
+
+  const faqJsonLd = {
+    ...jsonLd,
+    mainEntity: faqGroups.flatMap((group) =>
+      group.items.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    ),
+  };
 
   return (
     <>
@@ -140,7 +394,7 @@ export default function Faq() {
           content="https://nurturaloam.tech/Logo.png"
         />
         <link rel="canonical" href="https://nurturaloam.tech/faq" />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
 
       <section className="min-h-max bg-[#F9FAFB] flex items-center">
@@ -158,8 +412,24 @@ export default function Faq() {
             </p>
           </ScrollReveal>
 
+          <ScrollReveal direction="up" delay={0.05}>
+            <div className="mb-8 sm:mb-10">
+              <label htmlFor="faq-search" className="sr-only">
+                Search frequently asked questions
+              </label>
+              <input
+                id="faq-search"
+                type="text"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search questions or answers..."
+                className="w-full rounded-xl border border-[#86975A]/30 bg-white px-4 py-3 text-sm sm:text-base text-[#282828] outline-none focus:border-[#86975A] focus:ring-2 focus:ring-[#86975A]/20"
+              />
+            </div>
+          </ScrollReveal>
+
           <div className="space-y-8">
-            {faqGroups.map((group, groupIndex) => (
+            {filteredFaqGroups.map((group, groupIndex) => (
               <ScrollReveal key={group.title} direction="up" delay={0.1}>
                 <div className="bg-[#E5EDCF] rounded-2xl p-4 sm:p-6">
                   <h2 className="text-xl sm:text-2xl font-black text-[#282828] mb-4 sm:mb-5">
@@ -187,7 +457,7 @@ export default function Faq() {
                             }
                           >
                             <span className="text-sm sm:text-base font-semibold text-[#282828]">
-                              {item.question}
+                              {highlightMatch(item.question)}
                             </span>
                             <ChevronDown
                               className={`w-5 h-5 shrink-0 text-[#86975A] transition-transform ${
@@ -202,9 +472,91 @@ export default function Faq() {
                             }`}
                           >
                             <div className="overflow-hidden">
-                              <p className="px-4 sm:px-5 pb-4 text-sm text-[#5f5f5f] leading-relaxed">
-                                {item.answer}
-                              </p>
+                              {item.question === ERROR_CODE_TABLE_QUESTION ? (
+                                <div className="px-4 sm:px-5 pb-4">
+                                  <div className="sm:hidden space-y-3">
+                                    {errorMeanings.map((row) => (
+                                      <div
+                                        key={row.code}
+                                        className="rounded-xl border border-[#86975A]/25 bg-white p-3"
+                                      >
+                                        <p className="text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
+                                          Code
+                                        </p>
+                                        <p className="mt-1 text-sm font-bold text-[#282828] break-words">
+                                          {highlightMatch(row.code)}
+                                        </p>
+                                        <p className="mt-3 text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
+                                          Meaning
+                                        </p>
+                                        <p className="mt-1 text-sm text-[#5f5f5f] leading-relaxed">
+                                          {highlightMatch(row.meaning)}
+                                        </p>
+                                        <p className="mt-3 text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
+                                          What Happens
+                                        </p>
+                                        <p className="mt-1 text-sm text-[#5f5f5f] leading-relaxed">
+                                          {highlightMatch(row.behavior)}
+                                        </p>
+                                        <p className="mt-3 text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
+                                          Troubleshooting
+                                        </p>
+                                        <p className="mt-1 text-sm text-[#5f5f5f] leading-relaxed">
+                                          {highlightMatch(row.troubleshooting)}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+
+                                  <div className="hidden sm:block overflow-x-auto">
+                                    <table className="w-full min-w-[640px] border-collapse rounded-xl overflow-hidden">
+                                      <thead>
+                                        <tr className="border-b border-[#86975A]/30">
+                                          <th className="text-left text-xs sm:text-sm font-bold text-[#282828] py-3 px-3">
+                                            Code
+                                          </th>
+                                          <th className="text-left text-xs sm:text-sm font-bold text-[#282828] py-3 px-3">
+                                            Meaning
+                                          </th>
+                                          <th className="text-left text-xs sm:text-sm font-bold text-[#282828] py-3 px-3">
+                                            What Happens
+                                          </th>
+                                          <th className="text-left text-xs sm:text-sm font-bold text-[#282828] py-3 px-3">
+                                            Troubleshooting
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {errorMeanings.map((row) => (
+                                          <tr
+                                            key={row.code}
+                                            className="border-b border-[#86975A]/15 last:border-b-0"
+                                          >
+                                            <td className="py-3 px-3 text-xs sm:text-sm font-semibold text-[#282828]">
+                                              {highlightMatch(row.code)}
+                                            </td>
+                                            <td className="py-3 px-3 text-xs sm:text-sm text-[#5f5f5f]">
+                                              {highlightMatch(row.meaning)}
+                                            </td>
+                                            <td className="py-3 px-3 text-xs sm:text-sm text-[#5f5f5f]">
+                                              {highlightMatch(row.behavior)}
+                                            </td>
+                                            <td className="py-3 px-3 text-xs sm:text-sm text-[#5f5f5f]">
+                                              {highlightMatch(
+                                                row.troubleshooting,
+                                              )}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              ) : (
+                                <p className="px-4 sm:px-5 pb-4 text-sm text-[#5f5f5f] leading-relaxed">
+                                  {highlightMatch(item.answer)}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -214,6 +566,14 @@ export default function Faq() {
                 </div>
               </ScrollReveal>
             ))}
+
+            {filteredFaqGroups.length === 0 && (
+              <div className="rounded-2xl border border-[#86975A]/20 bg-[#E5EDCF] p-6 text-center">
+                <p className="text-sm sm:text-base text-[#5f5f5f]">
+                  No FAQ matches your search yet. Try a different keyword.
+                </p>
+              </div>
+            )}
           </div>
 
           <ScrollReveal direction="up" delay={0.15}>
