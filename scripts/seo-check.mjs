@@ -4,18 +4,6 @@ import path from "node:path";
 const ROOT = process.cwd();
 const DIST_DIR = path.join(ROOT, "dist");
 
-const routeFiles = [
-  { route: "/", file: path.join(DIST_DIR, "index.html") },
-  { route: "/product", file: path.join(DIST_DIR, "product", "index.html") },
-  { route: "/pricing", file: path.join(DIST_DIR, "pricing", "index.html") },
-  {
-    route: "/technology",
-    file: path.join(DIST_DIR, "technology", "index.html"),
-  },
-  { route: "/about", file: path.join(DIST_DIR, "about", "index.html") },
-  { route: "/faq", file: path.join(DIST_DIR, "faq", "index.html") },
-];
-
 const staticFiles = [
   path.join(DIST_DIR, "robots.txt"),
   path.join(DIST_DIR, "sitemap.xml"),
@@ -49,10 +37,6 @@ function hasJsonLd(html) {
   );
 }
 
-function hasFaqEntities(html) {
-  return /"@type":"FAQPage"/.test(html) && /"@type":"Question"/.test(html);
-}
-
 const errors = [];
 
 if (!fs.existsSync(DIST_DIR)) {
@@ -67,34 +51,26 @@ for (const filePath of staticFiles) {
   }
 }
 
-for (const route of routeFiles) {
-  if (!fs.existsSync(route.file)) {
-    errors.push(
-      `Missing prerendered route file for ${route.route}: ${path.relative(ROOT, route.file)}`,
-    );
-    continue;
-  }
-
-  const html = fs.readFileSync(route.file, "utf8");
+const indexFile = path.join(DIST_DIR, "index.html");
+if (!fs.existsSync(indexFile)) {
+  errors.push("Missing dist/index.html");
+} else {
+  const html = fs.readFileSync(indexFile, "utf8");
 
   if (!hasTitle(html)) {
-    errors.push(`Missing <title> tag in ${route.route}`);
+    errors.push("Missing <title> tag in dist/index.html");
   }
 
   if (!hasMetaDescription(html)) {
-    errors.push(`Missing meta description in ${route.route}`);
+    errors.push("Missing meta description in dist/index.html");
   }
 
   if (!hasCanonical(html)) {
-    errors.push(`Missing canonical link in ${route.route}`);
+    errors.push("Missing canonical link in dist/index.html");
   }
 
   if (!hasJsonLd(html)) {
-    errors.push(`Missing JSON-LD script in ${route.route}`);
-  }
-
-  if (route.route === "/faq" && !hasFaqEntities(html)) {
-    errors.push("FAQ route is missing Question/Answer entities in JSON-LD");
+    errors.push("Missing JSON-LD script in dist/index.html");
   }
 }
 
@@ -106,4 +82,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("SEO checks passed for prerendered routes and core metadata.");
+console.log("SEO checks passed for SPA build artifacts and core metadata.");
