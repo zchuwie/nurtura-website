@@ -56,8 +56,12 @@ function PricingTable({
         <tbody>
           {rows.map((row) => (
             <tr key={row.item} className="border-t border-[#EEF0EA]">
-              <td className="px-5 py-3 text-sm font-semibold text-[#2F3A1F]">{row.item}</td>
-              <td className="px-5 py-3 text-sm text-[#4B5563]">{row.details}</td>
+              <td className="px-5 py-3 text-sm font-semibold text-[#2F3A1F]">
+                {row.item}
+              </td>
+              <td className="px-5 py-3 text-sm text-[#4B5563]">
+                {row.details}
+              </td>
               <td className="px-5 py-3 text-sm text-[#4B5563] text-right font-semibold">
                 {row.amount}
               </td>

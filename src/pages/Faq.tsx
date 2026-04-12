@@ -34,7 +34,6 @@ interface ErrorMeaning {
   code: string;
   meaning: string;
   behavior: string;
-  troubleshooting: string;
 }
 
 const ERROR_CODE_TABLE_QUESTION = "What do the device error codes mean?";
@@ -66,11 +65,6 @@ const faqGroups: FaqGroup[] = [
         question: "Can I install or service the hub sensors by myself?",
         answer:
           "At the moment, no. The hub sensor setup is advanced and is currently installed, calibrated, and serviced only by LoamTech Solutions to ensure safety and reliability.",
-      },
-      {
-        question: "Can I troubleshoot hardware issues by myself?",
-        answer:
-          "For now, troubleshooting of hub sensors and hardware-related issues is handled only by LoamTech Solutions to avoid misconfiguration and equipment damage.",
       },
     ],
   },
@@ -123,11 +117,6 @@ const faqGroups: FaqGroup[] = [
           "If the service is temporarily unavailable, the app and device detect it and reconnect when service returns.",
       },
       {
-        question: "Can sensor streaming be turned on or off?",
-        answer:
-          "Yes. Sensor updates can be turned on or off depending on your rack status and setup.",
-      },
-      {
         question: "Where can I check the meaning of device error codes?",
         answer:
           "Open the device error code question below to view the full error meaning table and what each code usually does.",
@@ -140,12 +129,12 @@ const faqGroups: FaqGroup[] = [
       {
         question: "What information is included in an error report?",
         answer:
-          "An error report can include an error code, plain-language message, severity level, time of issue, affected part, and extra details for troubleshooting.",
+          "An error report can include an error code, plain-language message, severity level, time of issue, affected part, and extra diagnostic details.",
       },
       {
         question: ERROR_CODE_TABLE_QUESTION,
         answer:
-          "Here is the complete error and recovery code reference used by Nurtura, including quick troubleshooting methods. For safety and reliability, actual hardware troubleshooting is managed only by LoamTech Solutions.",
+          "Here is the complete error and recovery code reference used by Nurtura, including what each code means and what usually happens.",
       },
     ],
   },
@@ -177,110 +166,82 @@ const errorMeanings: ErrorMeaning[] = [
     meaning: "A sensor is not responding correctly.",
     behavior:
       "Usually HIGH/CRITICAL. Related automatic actions may pause and you may receive an alert.",
-    troubleshooting:
-      "Check sensor wiring, restart the rack, and make sure the sensor is firmly connected.",
   },
   {
     code: "SENSOR_TIMEOUT",
     meaning: "Sensor did not respond in time.",
     behavior:
       "Usually MEDIUM/HIGH. The current reading may be skipped and retried automatically.",
-    troubleshooting:
-      "Wait for the next retry cycle, then restart the rack if the issue repeats.",
   },
   {
     code: "SENSOR_NOT_FOUND",
     meaning: "Expected sensor hardware was not detected.",
     behavior:
       "Usually HIGH/CRITICAL. Related measurements remain unavailable until fixed.",
-    troubleshooting:
-      "Reconnect the sensor module and verify the correct sensor is installed.",
   },
   {
     code: "SENSOR_OUT_OF_RANGE",
     meaning: "Sensor reported a value outside normal limits.",
     behavior:
       "Usually MEDIUM. Reading may be flagged to avoid unsafe automation decisions.",
-    troubleshooting:
-      "Check environmental conditions and sensor placement, then calibrate if needed.",
   },
   {
     code: "PUMP_FAILURE",
     meaning: "Pump did not operate as expected.",
     behavior:
       "Usually HIGH/CRITICAL. Watering may fail and related automatic actions may pause.",
-    troubleshooting:
-      "Check pump power, tubing, and blockages; ensure the pump motor can spin freely.",
   },
   {
     code: "PUMP_TIMEOUT",
     meaning: "Pump action took too long.",
     behavior:
       "Usually MEDIUM/HIGH. Process may be stopped to prevent hardware damage.",
-    troubleshooting:
-      "Inspect water flow and pressure, then restart watering after fixing restrictions.",
   },
   {
     code: "PUMP_NO_WATER",
     meaning: "Pump cannot draw water from source.",
     behavior:
       "Usually HIGH. Watering stops and refill or plumbing checks are needed.",
-    troubleshooting:
-      "Refill water source and make sure intake hose is submerged and not blocked.",
   },
   {
     code: "PUMP_FALSE_START",
     meaning: "Pump was commanded to start but no valid activity was detected.",
     behavior:
       "Usually MEDIUM/HIGH. Action may be cancelled and diagnostics logged.",
-    troubleshooting:
-      "Check electrical connection and retry once; if repeated, inspect pump hardware.",
   },
   {
     code: "LIGHT_FAILURE",
     meaning: "Grow light did not respond as expected.",
     behavior:
       "Usually HIGH. Lighting control can fail and warning notifications can be sent.",
-    troubleshooting:
-      "Check power supply and light wiring, then test light manually from app controls.",
   },
   {
     code: "UNKNOWN_ERROR",
     meaning: "Unexpected device-side issue.",
     behavior:
       "Severity varies. The system records details and may trigger alerts based on impact.",
-    troubleshooting:
-      "Restart the rack first; if the issue persists, contact support with the error time.",
   },
   {
     code: "SENSOR_RECOVERED",
     meaning: "A previous sensor issue has been resolved.",
     behavior:
       "Usually LOW. Related automations can be resumed after confirmation.",
-    troubleshooting:
-      "No action needed. Continue monitoring to confirm values remain stable.",
   },
   {
     code: "PUMP_RECOVERED",
     meaning: "A previous pump issue has been resolved.",
     behavior: "Usually LOW. Pump-related automations can safely resume.",
-    troubleshooting:
-      "No action needed. Run a short watering test if you want to verify recovery.",
   },
   {
     code: "LIGHT_RECOVERED",
     meaning: "A previous lighting issue has been resolved.",
     behavior: "Usually LOW. Lighting controls can return to normal operation.",
-    troubleshooting:
-      "No action needed. Confirm scheduled lighting resumes as expected.",
   },
   {
     code: "UNKNOWN_RECOVERY",
     meaning: "A previously unknown issue was reported as recovered.",
     behavior:
       "Usually LOW. The issue is marked resolved and normal monitoring continues.",
-    troubleshooting:
-      "No action needed. If the same issue returns, report it with screenshots/log time.",
   },
 ];
 
@@ -323,8 +284,7 @@ export default function Faq() {
         const errorTableText = isErrorTableItem
           ? errorMeanings
               .map(
-                (entry) =>
-                  `${entry.code} ${entry.meaning} ${entry.behavior} ${entry.troubleshooting}`,
+                (entry) => `${entry.code} ${entry.meaning} ${entry.behavior}`,
               )
               .join(" ")
               .toLowerCase()
@@ -483,7 +443,7 @@ export default function Faq() {
                                         <p className="text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
                                           Code
                                         </p>
-                                        <p className="mt-1 text-sm font-bold text-[#282828] break-words">
+                                        <p className="mt-1 text-sm font-bold text-[#282828] wrap-break-word">
                                           {highlightMatch(row.code)}
                                         </p>
                                         <p className="mt-3 text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
@@ -499,17 +459,17 @@ export default function Faq() {
                                           {highlightMatch(row.behavior)}
                                         </p>
                                         <p className="mt-3 text-[11px] uppercase tracking-wide text-[#7d8a5a] font-semibold">
-                                          Troubleshooting
+                                          Status
                                         </p>
                                         <p className="mt-1 text-sm text-[#5f5f5f] leading-relaxed">
-                                          {highlightMatch(row.troubleshooting)}
+                                          Reference only
                                         </p>
                                       </div>
                                     ))}
                                   </div>
 
                                   <div className="hidden sm:block overflow-x-auto">
-                                    <table className="w-full min-w-[640px] border-collapse rounded-xl overflow-hidden">
+                                    <table className="w-full min-w-160 border-collapse rounded-xl overflow-hidden">
                                       <thead>
                                         <tr className="border-b border-[#86975A]/30">
                                           <th className="text-left text-xs sm:text-sm font-bold text-[#282828] py-3 px-3">
@@ -522,7 +482,7 @@ export default function Faq() {
                                             What Happens
                                           </th>
                                           <th className="text-left text-xs sm:text-sm font-bold text-[#282828] py-3 px-3">
-                                            Troubleshooting
+                                            Status
                                           </th>
                                         </tr>
                                       </thead>
@@ -542,9 +502,7 @@ export default function Faq() {
                                               {highlightMatch(row.behavior)}
                                             </td>
                                             <td className="py-3 px-3 text-xs sm:text-sm text-[#5f5f5f]">
-                                              {highlightMatch(
-                                                row.troubleshooting,
-                                              )}
+                                              Reference only
                                             </td>
                                           </tr>
                                         ))}
