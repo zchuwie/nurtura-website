@@ -95,7 +95,7 @@ export default function Landing() {
     type: "WebSite",
     name: "Nurtura",
     description:
-      "Nurtura is a smart IoT-based indoor farming system for urban environments. Grow smarter, fresher, and more efficiently.",
+      "Nurtura is an automated IoT-based indoor farming system for urban environments. Grow fresher and more efficiently.",
     url: "https://nurturaloam.tech/",
     image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
@@ -109,10 +109,10 @@ export default function Landing() {
   return (
     <>
       <Helmet>
-        <title>Nurtura | Smart Indoor Farming System</title>
+        <title>Nurtura | Automated Indoor Farming System</title>
         <meta
           name="description"
-          content="Nurtura is a smart IoT-based indoor farming system for urban environments. Grow smarter, fresher, and more efficiently."
+          content="Nurtura is an automated IoT-based indoor farming system for urban environments. Grow fresher and more efficiently."
         />
         <meta
           name="keywords"
@@ -120,11 +120,11 @@ export default function Landing() {
         />
         <meta
           property="og:title"
-          content="Nurtura | Smart Indoor Farming System"
+          content="Nurtura | Automated Indoor Farming System"
         />
         <meta
           property="og:description"
-          content="Nurtura is a smart IoT-based indoor farming system for urban environments. Grow smarter, fresher, and more efficiently."
+          content="Nurtura is an automated IoT-based indoor farming system for urban environments. Grow fresher and more efficiently."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nurturaloam.tech/" />
@@ -132,11 +132,11 @@ export default function Landing() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Nurtura | Smart Indoor Farming System"
+          content="Nurtura | Automated Indoor Farming System"
         />
         <meta
           name="twitter:description"
-          content="Nurtura is a smart IoT-based indoor farming system for urban environments. Grow smarter, fresher, and more efficiently."
+          content="Nurtura is an automated IoT-based indoor farming system for urban environments. Grow fresher and more efficiently."
         />
         <meta
           name="twitter:image"
@@ -164,7 +164,7 @@ export default function Landing() {
               className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.22em]"
               style={{ color: COLOR_PRIMARY }}
             >
-              IoT-Based Smart Indoor Farming System
+              IoT-Based Automated Indoor Farming System
             </p>
             <h1
               className="text-6xl sm:text-7xl lg:text-8xl font-black"

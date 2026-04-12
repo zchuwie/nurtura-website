@@ -144,8 +144,8 @@ export default function Product() {
                   Meet <span className="text-[#86975A]">Nurtura</span>
                 </h2>
                 <p className="text-sm text-[#919191] leading-relaxed mb-4">
-                  Nurtura is an IoT-based smart indoor farming system built for
-                  dense urban spaces. It combines real-time sensing and
+                  Nurtura is an IoT-based automated indoor farming system built
+                  for dense urban spaces. It combines real-time sensing and
                   automation to reduce manual labor while improving crop
                   consistency.
                 </p>

@@ -50,7 +50,7 @@ const faqGroups: FaqGroup[] = [
       {
         question: "What is Nurtura?",
         answer:
-          "Nurtura is a smart indoor farming system that uses IoT sensors and automation to help users grow plants in compact urban spaces.",
+          "Nurtura is an automated indoor farming system that uses IoT sensors and automation to help users grow plants in compact urban spaces.",
       },
       {
         question: "Who is Nurtura for?",

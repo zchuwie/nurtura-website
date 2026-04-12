@@ -73,7 +73,7 @@ export default function Technology() {
     type: "WebPage",
     name: "Nurtura Technology",
     description:
-      "Explore the technology behind Nurtura's smart indoor farming system, including IoT, cloud, and automation.",
+      "Explore the technology behind Nurtura's automated indoor farming system, including IoT, cloud, and automation.",
     url: "https://nurturaloam.tech/technology",
     image: "https://nurturaloam.tech/Logo.png",
     publisher: { name: "Nurtura" },
@@ -84,7 +84,7 @@ export default function Technology() {
         <title>Nurtura Technology | Smart Farming Tech</title>
         <meta
           name="description"
-          content="Explore the technology behind Nurtura's smart indoor farming system, including IoT, cloud, and automation."
+          content="Explore the technology behind Nurtura's automated indoor farming system, including IoT, cloud, and automation."
         />
         <meta
           name="keywords"
@@ -96,7 +96,7 @@ export default function Technology() {
         />
         <meta
           property="og:description"
-          content="Explore the technology behind Nurtura's smart indoor farming system, including IoT, cloud, and automation."
+          content="Explore the technology behind Nurtura's automated indoor farming system, including IoT, cloud, and automation."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nurturaloam.tech/technology" />
@@ -108,7 +108,7 @@ export default function Technology() {
         />
         <meta
           name="twitter:description"
-          content="Explore the technology behind Nurtura's smart indoor farming system, including IoT, cloud, and automation."
+          content="Explore the technology behind Nurtura's automated indoor farming system, including IoT, cloud, and automation."
         />
         <meta
           name="twitter:image"
