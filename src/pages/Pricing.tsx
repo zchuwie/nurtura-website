@@ -43,7 +43,9 @@ function PricingTable({
         {rows.map((row) => (
           <div key={row.item} className="p-4 space-y-2">
             <p className="text-sm font-semibold text-[#2F3A1F]">{row.item}</p>
-            <p className="text-sm text-[#4B5563] leading-relaxed">{row.details}</p>
+            <p className="text-sm text-[#4B5563] leading-relaxed">
+              {row.details}
+            </p>
             <p className="text-sm font-semibold text-[#2F3A1F]">{row.amount}</p>
           </div>
         ))}
@@ -51,34 +53,34 @@ function PricingTable({
 
       <div className="hidden sm:block overflow-x-auto">
         <table className="w-full min-w-160 text-left">
-        <thead className="bg-[#F5F7F0]">
-          <tr>
-            <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D]">
-              {headers[0]}
-            </th>
-            <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D]">
-              {headers[1]}
-            </th>
-            <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D] text-right">
-              {headers[2]}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.item} className="border-t border-[#EEF0EA]">
-              <td className="px-5 py-3 text-sm font-semibold text-[#2F3A1F]">
-                {row.item}
-              </td>
-              <td className="px-5 py-3 text-sm text-[#4B5563]">
-                {row.details}
-              </td>
-              <td className="px-5 py-3 text-sm text-[#4B5563] text-right font-semibold">
-                {row.amount}
-              </td>
+          <thead className="bg-[#F5F7F0]">
+            <tr>
+              <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D]">
+                {headers[0]}
+              </th>
+              <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D]">
+                {headers[1]}
+              </th>
+              <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D] text-right">
+                {headers[2]}
+              </th>
             </tr>
-          ))}
-        </tbody>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.item} className="border-t border-[#EEF0EA]">
+                <td className="px-5 py-3 text-sm font-semibold text-[#2F3A1F]">
+                  {row.item}
+                </td>
+                <td className="px-5 py-3 text-sm text-[#4B5563]">
+                  {row.details}
+                </td>
+                <td className="px-5 py-3 text-sm text-[#4B5563] text-right font-semibold">
+                  {row.amount}
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
