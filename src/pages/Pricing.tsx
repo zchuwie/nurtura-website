@@ -38,8 +38,19 @@ function PricingTable({
   }>;
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-[#E5E7EB] bg-white">
-      <table className="w-full min-w-150 text-left">
+    <div className="rounded-2xl border border-[#E5E7EB] bg-white">
+      <div className="sm:hidden divide-y divide-[#EEF0EA]">
+        {rows.map((row) => (
+          <div key={row.item} className="p-4 space-y-2">
+            <p className="text-sm font-semibold text-[#2F3A1F]">{row.item}</p>
+            <p className="text-sm text-[#4B5563] leading-relaxed">{row.details}</p>
+            <p className="text-sm font-semibold text-[#2F3A1F]">{row.amount}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden sm:block overflow-x-auto">
+        <table className="w-full min-w-160 text-left">
         <thead className="bg-[#F5F7F0]">
           <tr>
             <th className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#3D3D3D]">
@@ -68,7 +79,8 @@ function PricingTable({
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 }
