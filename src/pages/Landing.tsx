@@ -423,9 +423,9 @@ export default function Landing() {
                 onClick={handleDownloadClick}
                 className="w-full max-w-52 sm:w-auto px-7 py-3 text-white text-sm font-bold rounded-full transition-all min-h-11"
                 style={{ background: COLOR_TEXT_DARK }}
-                aria-label="Nurtura app coming soon"
+                aria-label="Download Nurtura app"
               >
-                Download App (Coming Soon)
+                Download App
               </button>
             </div>
           </ScrollReveal>

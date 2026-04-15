@@ -2,6 +2,24 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/Logo.png";
 
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: string | HTMLElement,
+        options: {
+          sitekey: string;
+          callback?: (token: string) => void;
+          "expired-callback"?: () => void;
+          "error-callback"?: () => void;
+          theme?: "light" | "dark";
+          size?: "normal" | "compact" | "flexible";
+        },
+      ) => string;
+    };
+  }
+}
+
 interface NavLink {
   label: string;
   to: string;
@@ -35,7 +53,15 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] =
     useState<boolean>(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [turnstileError, setTurnstileError] = useState<string>("");
+  const [isSubmittingDownload, setIsSubmittingDownload] =
+    useState<boolean>(false);
   const location = useLocation();
+  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as
+    | string
+    | undefined;
+  const isTurnstileConfigured = Boolean(turnstileSiteKey);
   const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
     CONTACT_EMAIL,
   )}&su=${encodeURIComponent(CONTACT_SUBJECT)}&body=${encodeURIComponent(CONTACT_BODY)}`;
@@ -60,6 +86,60 @@ export default function Navbar() {
   }, [isDownloadModalOpen]);
 
   useEffect(() => {
+    if (!isDownloadModalOpen || !isTurnstileConfigured) {
+      return;
+    }
+
+    const scriptId = "cf-turnstile-script";
+    const existingScript = document.getElementById(scriptId);
+
+    const renderWidget = () => {
+      const widgetContainer = document.getElementById("turnstile-widget");
+      if (!widgetContainer || !window.turnstile || !turnstileSiteKey) {
+        return;
+      }
+
+      widgetContainer.innerHTML = "";
+      setTurnstileToken("");
+      setTurnstileError("");
+
+      window.turnstile.render(widgetContainer, {
+        sitekey: turnstileSiteKey,
+        theme: "light",
+        size: window.innerWidth < 380 ? "compact" : "flexible",
+        callback: (token: string) => {
+          setTurnstileToken(token);
+          setTurnstileError("");
+        },
+        "expired-callback": () => {
+          setTurnstileToken("");
+          setTurnstileError("Verification expired. Please verify again.");
+        },
+        "error-callback": () => {
+          setTurnstileToken("");
+          setTurnstileError("Verification failed. Please retry.");
+        },
+      });
+    };
+
+    if (existingScript) {
+      renderWidget();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.onload = renderWidget;
+    script.onerror = () => {
+      setTurnstileError("Unable to load verification. Please refresh and retry.");
+    };
+    document.head.appendChild(script);
+  }, [isDownloadModalOpen, isTurnstileConfigured, turnstileSiteKey]);
+
+  useEffect(() => {
     const openDownloadModal = () => {
       setIsDownloadModalOpen(true);
     };
@@ -69,6 +149,40 @@ export default function Navbar() {
       window.removeEventListener("open-download-modal", openDownloadModal);
     };
   }, []);
+
+  const closeDownloadModal = () => {
+    setIsDownloadModalOpen(false);
+    setTurnstileToken("");
+    setTurnstileError("");
+    setIsSubmittingDownload(false);
+  };
+
+  const handleDownloadSubmit = () => {
+    if (!turnstileToken) {
+      setTurnstileError("Please complete the verification first.");
+      return;
+    }
+
+    setIsSubmittingDownload(true);
+    setTurnstileError("");
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/api/download-apk";
+    form.style.display = "none";
+
+    const tokenInput = document.createElement("input");
+    tokenInput.type = "hidden";
+    tokenInput.name = "turnstileToken";
+    tokenInput.value = turnstileToken;
+    form.appendChild(tokenInput);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    closeDownloadModal();
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-[#F9FAFB] border-b border-[#E5EDCF]">
@@ -179,42 +293,72 @@ export default function Navbar() {
 
       {isDownloadModalOpen && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center px-4"
-          style={{ background: "rgba(40,40,40,0.55)" }}
-          onClick={() => setIsDownloadModalOpen(false)}
+          className="fixed inset-0 z-60 flex items-center justify-center px-3 sm:px-4"
+          style={{ background: "rgba(40,40,40,0.58)", backdropFilter: "blur(2px)" }}
+          onClick={closeDownloadModal}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="download-modal-title"
             aria-describedby="download-modal-description"
-            className="w-full max-w-md rounded-2xl p-6 sm:p-7 shadow-2xl"
+            className="w-full max-w-md rounded-2xl p-4 sm:p-7 shadow-2xl max-h-[90vh] overflow-y-auto"
             style={{
               background: "#E5EDCF",
               border: "1px solid #6e7d48",
             }}
             onClick={(event) => event.stopPropagation()}
           >
+            <p className="inline-flex items-center rounded-full bg-[#d9e3ba] px-3 py-1 text-xs font-semibold tracking-wide text-[#516136]">
+              Secure download
+            </p>
             <h3
               id="download-modal-title"
-              className="text-2xl sm:text-3xl font-black text-[#282828]"
+              className="mt-3 text-2xl sm:text-3xl font-black text-[#282828]"
             >
-              App Coming Soon
+              Download Nurtura App
             </h3>
             <p
               id="download-modal-description"
-              className="mt-3 text-sm sm:text-base leading-relaxed text-[#7d8a5a]"
+              className="mt-2 text-sm sm:text-base leading-relaxed text-[#7d8a5a]"
             >
-              The Nurtura mobile app is not yet available for download. We are
-              preparing it for release.
+              Complete verification, then your download will begin.
             </p>
-            <div className="mt-6 flex justify-end">
+
+            {!isTurnstileConfigured ? (
+              <p className="mt-4 rounded-xl border border-[#d97706] bg-[#fff7ed] px-4 py-3 text-sm text-[#9a3412]">
+                Download is unavailable. Missing Turnstile site key setup.
+              </p>
+            ) : (
+              <div className="mt-4 rounded-xl border border-[#c6d3a1] bg-[#f3f7e8] p-2.5 sm:p-4">
+                <p className="mb-2 text-xs font-medium text-[#5f6d40]">
+                  Verify to continue
+                </p>
+                <div
+                  id="turnstile-widget"
+                  className="min-h-16 w-full overflow-hidden flex justify-center"
+                />
+                {turnstileError ? (
+                  <p className="mt-2 text-sm text-[#b91c1c]">{turnstileError}</p>
+                ) : null}
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3">
               <button
                 type="button"
-                onClick={() => setIsDownloadModalOpen(false)}
-                className="px-5 py-2.5 rounded-full text-sm font-bold min-h-11 bg-[#86975A] text-white hover:bg-[#6e7d48] transition-colors"
+                onClick={closeDownloadModal}
+                className="px-5 py-2.5 rounded-full text-sm font-semibold min-h-11 border border-[#86975A] text-[#6e7d48] hover:bg-[#d9e3ba] transition-colors"
               >
-                Got it
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDownloadSubmit}
+                disabled={!isTurnstileConfigured || isSubmittingDownload}
+                className="px-5 py-2.5 rounded-full text-sm font-bold min-h-11 bg-[#86975A] text-white hover:bg-[#6e7d48] transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSubmittingDownload ? "Starting download..." : "Download now"}
               </button>
             </div>
           </div>
