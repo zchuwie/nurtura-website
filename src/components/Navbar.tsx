@@ -129,12 +129,15 @@ export default function Navbar() {
 
     const script = document.createElement("script");
     script.id = scriptId;
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.src =
+      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
     script.async = true;
     script.defer = true;
     script.onload = renderWidget;
     script.onerror = () => {
-      setTurnstileError("Unable to load verification. Please refresh and retry.");
+      setTurnstileError(
+        "Unable to load verification. Please refresh and retry.",
+      );
     };
     document.head.appendChild(script);
   }, [isDownloadModalOpen, isTurnstileConfigured, turnstileSiteKey]);
@@ -294,7 +297,10 @@ export default function Navbar() {
       {isDownloadModalOpen && (
         <div
           className="fixed inset-0 z-60 flex items-center justify-center px-3 sm:px-4"
-          style={{ background: "rgba(40,40,40,0.58)", backdropFilter: "blur(2px)" }}
+          style={{
+            background: "rgba(40,40,40,0.58)",
+            backdropFilter: "blur(2px)",
+          }}
           onClick={closeDownloadModal}
         >
           <div
@@ -339,7 +345,9 @@ export default function Navbar() {
                   className="min-h-16 w-full overflow-hidden flex justify-center"
                 />
                 {turnstileError ? (
-                  <p className="mt-2 text-sm text-[#b91c1c]">{turnstileError}</p>
+                  <p className="mt-2 text-sm text-[#b91c1c]">
+                    {turnstileError}
+                  </p>
                 ) : null}
               </div>
             )}

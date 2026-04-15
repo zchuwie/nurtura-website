@@ -1,4 +1,5 @@
-const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const TURNSTILE_VERIFY_URL =
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 function getClientIp(req) {
   const xForwardedFor = req.headers["x-forwarded-for"];
@@ -85,6 +86,8 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "no-store");
     return res.redirect(302, githubReleaseApkUrl);
   } catch {
-    return res.status(500).json({ error: "Unable to process download request" });
+    return res
+      .status(500)
+      .json({ error: "Unable to process download request" });
   }
 }
